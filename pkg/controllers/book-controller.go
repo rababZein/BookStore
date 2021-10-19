@@ -9,12 +9,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rababZein/BookStore/pkg/models"
 	"github.com/rababZein/BookStore/pkg/utils"
-	"github.com/rababZein/pkg/models"
 )
 
 var NewBook models.Book
 
-func GetBook(w http.ResponseWriter, r *http.Request) {
+func GetAllBooks(w http.ResponseWriter, r *http.Request) {
 	newBooks := models.GetAllBooks()
 	res, _ := json.Marshal(newBooks)
 	w.Header().Set("Content-Type", "pkglication/json")
@@ -29,7 +28,7 @@ func GetBooksById(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("error while parsing")
 	}
-	bookDetails := models.GetBooksById(ID)
+	bookDetails, _ := models.GetBooksById(ID)
 	res, _ := json.Marshal(bookDetails)
 	w.Header().Set("Content-Type", "pkglication/json")
 	w.WriteHeader(http.StatusOK)
@@ -62,7 +61,7 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var updateBook = &models.Book{}
-	utils.ParseBody()(r, updateBook)
+	utils.ParseBody(r, updateBook)
 	vars := mux.Vars(r)
 	bookId :=  vars["bookId"]
 	ID, err := strconv.ParseInt(bookId, 0, 0)
